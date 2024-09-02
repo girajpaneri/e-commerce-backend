@@ -1,0 +1,136 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Product {
+  id: String!
+  isActive: Boolean!
+  createDate: DateTime!
+  updateDate: DateTime!
+  productId: String!
+  name: String!
+  price: Float!
+  orders: [Order!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Order {
+  id: String!
+  isActive: Boolean!
+  createDate: DateTime!
+  updateDate: DateTime!
+  orderId: String!
+  orderNumber: String!
+  orderDate: DateTime!
+  products: [Product!]!
+  customer: Customer!
+}
+
+"""Represents a customer in the system."""
+type Customer {
+  id: String!
+  isActive: Boolean!
+  createDate: DateTime!
+  updateDate: DateTime!
+  customerId: String!
+  name: String!
+
+  """10 digit phone number."""
+  phone: String
+  email: String
+  orders: [Order!]
+}
+
+type Query {
+  customers: [Customer!]!
+  customer(id: String!): Customer
+
+  """Get all products"""
+  products: [Product!]!
+
+  """Get a product by ID"""
+  product(id: String!): Product
+  orders: [Order!]!
+  order(id: String!): Order!
+}
+
+type Mutation {
+  createCustomer(input: CreateCustomerInput!): Customer!
+  updateCustomer(id: String!, input: UpdateCustomerInput!): Customer
+  deleteCustomer(id: String!): String!
+
+  """Create a new product"""
+  createProduct(input: CreateProductInput!): Product!
+
+  """Update an existing product"""
+  updateProduct(id: String!, input: UpdateProductInput!): Product!
+
+  """Delete a product by ID"""
+  deleteProduct(id: String!): String!
+  createOrder(input: CreateOrderInput!): Order!
+  updateOrder(id: String!, input: UpdateOrderInput!): Order!
+  deleteOrder(id: String!): Boolean!
+  addProductToOrder(orderId: String!, productId: String!): Order!
+  removeProductFromOrder(orderId: String!, productId: String!): Order!
+}
+
+input CreateCustomerInput {
+  name: String!
+
+  """10 digit phone number."""
+  phone: String
+  email: String
+  orders: [AddOrderInput!]
+}
+
+"""Input type for referencing an order by its ID."""
+input AddOrderInput {
+  """The unique identifier of the order."""
+  id: String!
+}
+
+input UpdateCustomerInput {
+  name: String
+
+  """10 digit phone number."""
+  phone: String
+  email: String
+  orders: [AddOrderInput!]
+  customerId: String
+}
+
+input CreateProductInput {
+  isActive: Boolean! = true
+  name: String!
+  price: Float!
+  orders: [AddOrderInput!]
+}
+
+input UpdateProductInput {
+  isActive: Boolean = true
+  name: String
+  price: Float
+  orders: [AddOrderInput!]
+  productId: String
+}
+
+input CreateOrderInput {
+  isActive: Boolean! = true
+  orderNumber: String!
+  orderDate: DateTime!
+  customerId: String!
+  productIds: [String!]!
+}
+
+input UpdateOrderInput {
+  isActive: Boolean = true
+  orderNumber: String
+  orderDate: DateTime
+  customerId: String
+  productIds: [String!]
+  id: String
+}
